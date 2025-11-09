@@ -16,17 +16,26 @@ export default {
         const wind = new VirtualWindow();
         wind.title = "Minecraft";
 
-        const height = 95;
-        const width = height / 4/3
+        // determine if width or height is the limiting factor
+        const width_limited = (window.innerWidth / window.innerHeight) < (4 / 3);
 
-        const x = (100 - width) / 2;
-        const y = (100 - height) / 2;
+        // generate width and height based on limiting factor. get to 95% of the limiting factor but maintain 4:3 aspect ratio
+        // do it in terms of viewport units, ensuring to use the same unit for both width and height
+        const unit = width_limited ? "vw" : "vh";
+        const size = 95;
 
-        wind.width = `${width}vw`;
-        wind.height = `${height}vh`;
+        const width = width_limited ? size : (size * (4 / 3));
+        const height = width_limited ? (size * (3 / 4)) : size
 
-        wind.x = `${x}vw`;
-        wind.y = `${y}vh`;
+        wind.width = `${width}${unit}`;
+        wind.height = `${height}${unit}`;
+
+        // use viewport units again for centering
+        const top = (100 - height) / 2;
+        const left = (100 - width) / 2;
+
+        wind.x = `${left}${unit}`;
+        wind.y = `${top}${unit}`;
 
         wind.dom.appendChild(iframe);
         wind.show();
