@@ -30,12 +30,9 @@ export default {
         wind.width = `${width}${unit}`;
         wind.height = `${height}${unit}`;
 
-        // use viewport units again for centering
-        const top = (100 - height) / 2;
-        const left = (100 - width) / 2;
-
-        wind.x = `${left}${unit}`;
-        wind.y = `${top}${unit}`;
+        // use viewport units and calculate center position
+        wind.x = `calc(50${unit} - ${width / 2}${unit})`;
+        wind.y = `calc(50${unit} - ${height / 2}${unit})`;
 
         wind.dom.appendChild(iframe);
         wind.show();
