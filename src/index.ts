@@ -16,8 +16,8 @@ export default {
         const wind = new VirtualWindow();
         wind.title = "Minecraft";
 
-        const width = 75;
-        const height = width * 4/3;
+        const height = 95;
+        const width = height / 4/3
 
         const x = (100 - width) / 2;
         const y = (100 - height) / 2;
