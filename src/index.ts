@@ -4,11 +4,28 @@ import type { Program } from "ollieos/src/types";
 export default {
     name: "minecraft",
     description: "Minecraft.",
-    usage_suffix: "",
-    arg_descriptions: {},
+    usage_suffix: "[small|normal|huge]",
+    arg_descriptions: {
+        "small|normal|huge": "The size of world to generate. Can be left blank.",
+    },
     main: async (data) => {
+        let size_arg = "";
+        if (data.args.length > 0) {
+            size_arg = data.args[0];
+        }
+
+        if (size_arg !== "" && size_arg !== "small" && size_arg !== "normal" && size_arg !== "huge") {
+            data.term.writeln("Invalid size. Valid sizes are: small, normal, huge.");
+            return 1;
+        }
+
+        const url = new URL("https://classic.minecraft.net/");
+        if (size_arg !== "") {
+            url.searchParams.set("size", size_arg);
+        }
+
         const iframe = document.createElement("iframe");
-        iframe.src = "https://classic.minecraft.net/";
+        iframe.src = url.toString();
         iframe.style.border = "none";
         iframe.style.width = "100%";
         iframe.style.height = "100%";
@@ -22,17 +39,17 @@ export default {
         // generate width and height based on limiting factor. get to 95% of the limiting factor but maintain 4:3 aspect ratio
         // do it in terms of viewport units, ensuring to use the same unit for both width and height
         const unit = width_limited ? "vw" : "vh";
-        const size = 95;
+        const win_size = 95;
 
-        const width = width_limited ? size : (size * (4 / 3));
-        const height = width_limited ? (size * (3 / 4)) : size
+        const width = width_limited ? win_size : (win_size * (4 / 3));
+        const height = width_limited ? (win_size * (3 / 4)) : win_size
 
         wind.width = `${width}${unit}`;
         wind.height = `${height}${unit}`;
 
         // use window.inner sizes to center the window
-        wind.x = (window.innerWidth - (width_limited ? (size / 100 * window.innerWidth) : (size * (4 / 3) / 100 * window.innerHeight))) / 2;
-        wind.y = (window.innerHeight - (width_limited ? (size * (3 / 4) / 100 * window.innerWidth) : (size / 100 * window.innerHeight))) / 2;
+        wind.x = (window.innerWidth - (width_limited ? (win_size / 100 * window.innerWidth) : (win_size * (4 / 3) / 100 * window.innerHeight))) / 2;
+        wind.y = (window.innerHeight - (width_limited ? (win_size * (3 / 4) / 100 * window.innerWidth) : (win_size / 100 * window.innerHeight))) / 2;
 
         wind.dom.appendChild(iframe);
         wind.show();
