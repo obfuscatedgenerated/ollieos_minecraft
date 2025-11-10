@@ -1,5 +1,4 @@
-import { VirtualWindow } from "ollieos/src/windowing";
-import type { Program } from "ollieos/src/types";
+import type { Program } from "ollieos/types";
 
 export default {
     name: "minecraft",
@@ -9,13 +8,15 @@ export default {
         "small|normal|huge": "The size of world to generate. Can be left blank.",
     },
     main: async (data) => {
+        const { term } = data;
+
         let size_arg = "";
         if (data.args.length > 0) {
             size_arg = data.args[0];
         }
 
         if (size_arg !== "" && size_arg !== "small" && size_arg !== "normal" && size_arg !== "huge") {
-            data.term.writeln("Invalid size. Valid sizes are: small, normal, huge.");
+            term.writeln("Invalid size. Valid sizes are: small, normal, huge.");
             return 1;
         }
 
@@ -30,7 +31,13 @@ export default {
         iframe.style.width = "100%";
         iframe.style.height = "100%";
 
-        const wind = new VirtualWindow();
+        const wm = term.get_window_manager();
+        if (!wm) {
+            term.writeln("Window manager not found.");
+            return 1;
+        }
+
+        const wind = new wm.Window();
         wind.title = "Minecraft";
 
         // determine if width or height is the limiting factor
