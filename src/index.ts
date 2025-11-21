@@ -7,8 +7,15 @@ export default {
     arg_descriptions: {
         "small|normal|huge": "The size of world to generate. Can be left blank.",
     },
+    completion: async (data) => {
+        if (data.arg_index === 0) {
+            return ["small", "normal", "huge"].filter(size => size.startsWith(data.current_partial));
+        }
+
+        return [];
+    },
     main: async (data) => {
-        const { term } = data;
+        const { term, process } = data;
 
         let size_arg = "";
         if (data.args.length > 0) {
@@ -31,13 +38,12 @@ export default {
         iframe.style.width = "100%";
         iframe.style.height = "100%";
 
-        const wm = term.get_window_manager();
-        if (!wm) {
+        if (!term.has_window_manager()) {
             term.writeln("Window manager not found.");
             return 1;
         }
 
-        const wind = new wm.Window();
+        const wind = process.create_window();
         wind.title = "Minecraft";
 
         // determine if width or height is the limiting factor
@@ -61,6 +67,11 @@ export default {
         wind.dom.appendChild(iframe);
         wind.show();
 
+        wind.add_event_listener("close", () => {
+           process.kill(0);
+        });
+
+        process.detach();
         return 0;
     }
 } as Program;
