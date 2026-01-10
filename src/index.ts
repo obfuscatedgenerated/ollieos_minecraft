@@ -7,6 +7,7 @@ export default {
     arg_descriptions: {
         "small|normal|huge": "The size of world to generate. Can be left blank.",
     },
+    compat: "2.0.0",
     completion: async (data) => {
         if (data.arg_index === 0) {
             return ["small", "normal", "huge"].filter(size => size.startsWith(data.current_partial));
@@ -15,7 +16,7 @@ export default {
         return [];
     },
     main: async (data) => {
-        const { term, process } = data;
+        const { kernel, term, process } = data;
 
         let size_arg = "";
         if (data.args.length > 0) {
@@ -38,7 +39,7 @@ export default {
         iframe.style.width = "100%";
         iframe.style.height = "100%";
 
-        if (!term.has_window_manager()) {
+        if (!kernel.has_window_manager()) {
             term.writeln("Window manager not found.");
             return 1;
         }
