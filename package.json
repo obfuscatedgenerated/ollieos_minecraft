@@ -10,8 +10,8 @@
     "dev": "concurrently \"npm:watch\" \"npx ollieos-pkg-serve\""
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "obfuscatedgenerated",
+  "license": "MIT",
   "devDependencies": {
     "concurrently": "^9.2.1",
     "ollieos": "github:obfuscatedgenerated/obfuscatedgenerated.github.io#types",
