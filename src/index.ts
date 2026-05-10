@@ -7,6 +7,9 @@ export default {
     arg_descriptions: {
         "small|normal|huge": "The size of world to generate. Can be left blank.",
     },
+    gui: {
+        display_name: "Minecraft"
+    },
     compat: "2.0.0",
     completion: async (data) => {
         if (data.arg_index === 0) {
